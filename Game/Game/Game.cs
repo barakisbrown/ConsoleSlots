@@ -93,6 +93,10 @@ namespace Game
             }
         }
 
+        private void Spin()
+        {
+            throw new NotImplementedException();
+        }
         
 
 
