@@ -18,7 +18,7 @@ namespace Game
 
         public Launcher() { }
 
-        public void GetDepositFromUser()
+        private void GetDepositFromUser()
         {
             while (true)
             {
@@ -45,7 +45,7 @@ namespace Game
             }
         }
 
-        public void GetNumberLines()
+        private void GetNumberLines()
         {
             while(true)
             {
@@ -69,7 +69,7 @@ namespace Game
             }
         }
 
-        public void getBet()
+        private void getBet()
         {
             while(true)
             {
@@ -92,6 +92,9 @@ namespace Game
                 }
             }
         }
+
+        
+
 
         public void Start()
         {
