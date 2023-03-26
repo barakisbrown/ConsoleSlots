@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Game
+﻿namespace Game
 {
     public class Symbols
     {
-        private Dictionary<char, int> SymbolCount = new();
-        private Dictionary<char, int> SymbolValues = new();
+        private readonly Dictionary<char, int> SymbolCount = new();
+        private readonly Dictionary<char, int> SymbolValues = new();
 
         public Symbols()
         {
@@ -32,8 +26,26 @@ namespace Game
             SymbolCount.Add('C', 6);
             SymbolCount.Add('D', 8);
         }
+       
+        public List<char> SymbolCount_toArray()
+        {
+            List<char> symbols = new();
 
-        public Dictionary<char, int> getSymbolCount => SymbolCount;
-        public Dictionary<char, int> getSymbolValues => SymbolValues;
+            foreach(KeyValuePair<char,int> group in SymbolCount)
+            {
+                for (var idx = 0; idx < group.Value; idx++)
+                    symbols.Add(group.Key);
+            }
+
+            return symbols;
+        }
+
+        public int GetValue(char Key)
+        {
+            if (SymbolValues.TryGetValue(Key, out int value))
+                return value;
+            else
+                return -1;
+        }
     }
 }

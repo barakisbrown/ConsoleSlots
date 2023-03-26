@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Game;
 
-Console.WriteLine("Welcome to consoleSlots.");
-Console.WriteLine();
-
+Launcher game = new();
+game.Start();

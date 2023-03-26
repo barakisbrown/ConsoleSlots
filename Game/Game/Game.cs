@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Game
+﻿namespace Game
 {
     public class Launcher
     {
-        private const int ROWS = 3;
-        private const int COLS = 3;
-        private double? player_deposit { get; set; } = 0.0;
-        private double? player_balance { get; set; } = 0.0;
-        private int linesBet { get; set; } = 0;
-        private double? player_bet { get; set; } = 0.0;
+        private double Player_deposit { get; set; } = 0.0;
+        private double Player_balance { get; set; } = 0.0;
+        private int LinesBet { get; set; } = 0;
+        private double Player_bet { get; set; } = 0.0;
 
         public Launcher() { }
 
@@ -32,8 +23,8 @@ namespace Game
                         continue;
                     }
 
-                    player_deposit = deposit;
-                    player_balance = deposit;
+                    Player_deposit = deposit;
+                    Player_balance = deposit;
                     break;
                 }
                 catch (FormatException)
@@ -58,7 +49,7 @@ namespace Game
                         Console.WriteLine("Entry must be between 1 and 3");
                         continue;
                     }
-                    linesBet = numberLines;
+                    LinesBet = numberLines;
                     break;
                 }
                 catch (FormatException)
@@ -69,7 +60,7 @@ namespace Game
             }
         }
 
-        private void getBet()
+        private void GetBet()
         {
             while(true)
             {
@@ -77,12 +68,12 @@ namespace Game
                 {
                     Console.Write("Enter the bet per line:");
                     double bet = Convert.ToDouble(Console.ReadLine());
-                    if ((bet <= 0) || (bet > player_balance / linesBet))
+                    if ((bet <= 0) || (bet > Player_balance / LinesBet))
                     {
                         Console.WriteLine("Invalid Bet.  Bet must be postive plus greater than your balance / lines you betting against");
                         continue;
                     }
-                    player_bet = bet;
+                    Player_bet = bet;
                     break;
                 }
                 catch (Exception)
@@ -91,20 +82,60 @@ namespace Game
                     continue;
                 }
             }
-        }
-
-        private void Spin()
-        {
-            throw new NotImplementedException();
-        }
-        
+        }             
 
 
         public void Start()
         {
+            Machine man = new();
+
+            // GET DEPOSIT
             GetDepositFromUser();
-            GetNumberLines();
-            getBet();
+
+            while(true)
+            {
+                GetNumberLines();
+                GetBet();
+                // UPDATE BALANCE
+                Player_balance -= Player_bet * LinesBet;
+                man.Spin();
+                man.PrintRows();
+                Console.WriteLine();
+                double winnings = man.GetWinning(Player_bet, LinesBet);
+                Player_balance = Player_balance + winnings;
+
+                String winningStr = "You";
+                if (winnings > 0)
+                    winningStr += " Won $" + winnings;
+                else
+                    winningStr += " Lost $" + (Player_bet * LinesBet);
+                                               
+                Console.WriteLine(winningStr);
+                Console.WriteLine();                
+                if (Player_balance == 0)
+                {
+                    Console.WriteLine();
+                    Console.Write("Since your balance is $0, Do you wish to add another deposit(Y/N)?");
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    if ((key.KeyChar == 'N')||(key.KeyChar == 'n'))
+                        break;
+                    else
+                    {
+                        Console.WriteLine();
+                        GetDepositFromUser();
+                        continue;
+                    }                    
+                }
+                Console.WriteLine($"Your current balance is ${Player_balance}");
+                Console.WriteLine();
+                Console.Write("Do you wish to play again? (Y/N)");
+                ConsoleKeyInfo playAgainkey = Console.ReadKey();
+                if (playAgainkey.KeyChar == 'n' || playAgainkey.KeyChar == 'N')
+                    break;
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+
         }
     }
 }
